@@ -31,11 +31,10 @@ export default function HomePage() {
         setResponseMsg("✅ Your request was received!");
         setFormData({ name: "", email: "", phone: "" });
       } else {
-        setResponseMsg("❌ Something went wrong. Please try again.");
+        setResponseMsg("❌ Something went wrong.");
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      setResponseMsg("❌ Server error. Please try again later.");
+      setResponseMsg("❌ Server error. Try again later.");
     } finally {
       setLoading(false);
     }
@@ -49,3 +48,52 @@ export default function HomePage() {
         </h1>
         <p className="text-lg text-gray-600 mb-8">
           Automatically find high-value property deals, schedule meetings, and
+          close more deals with the power of AI.
+        </p>
+
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4 bg-white p-6 rounded shadow text-left"
+        >
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded"
+            required
+          />
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Phone Number"
+            value={formData.phone}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-black text-white p-2 rounded hover:bg-gray-800 transition"
+          >
+            {loading ? "Submitting..." : "Request Early Access"}
+          </button>
+        </form>
+
+        {responseMsg && (
+          <p className="mt-4 text-center text-sm text-gray-700">{responseMsg}</p>
+        )}
+      </div>
+    </main>
+  );
+}
