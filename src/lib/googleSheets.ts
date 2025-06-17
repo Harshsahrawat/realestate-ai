@@ -1,6 +1,10 @@
 import { google } from "googleapis";
 import { JWT } from "google-auth-library";
-import credentials from "./google-credentials.json";
+const credentials = {
+  client_email: process.env.GOOGLE_CLIENT_EMAIL,
+  private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+};
+
 
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 const spreadsheetId = "your-sheet-id-here";  // replace with your actual ID
