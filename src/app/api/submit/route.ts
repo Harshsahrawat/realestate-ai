@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { appendRow } from '@/lib/googleSheets';
+import { appendRow } from '../../../lib/googleSheets';
+
 
 export async function POST(request: NextRequest) {
   try {
