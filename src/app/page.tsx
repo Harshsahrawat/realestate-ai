@@ -1,58 +1,69 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { RocketIcon } from "lucide-react";
+'use client';
+import { useState } from 'react';
 
 export default function HomePage() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await fetch('/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+    if (res.ok) alert('Lead submitted!');
+    else alert('Something went wrong.');
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gray-100 p-8">
-      <div className="max-w-4xl w-full text-center">
+      <div className="max-w-2xl w-full text-center">
         <h1 className="text-4xl font-bold mb-4">AI Assistant for Real Estate Builders</h1>
         <p className="text-lg text-gray-600 mb-8">
           Automatically find high-value property deals, schedule meetings, and close more deals with the power of AI.
         </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-2">Smart Deal Scanner</h2>
-              <p className="text-sm text-gray-600">
-                Scans real estate marketplaces 24/7 to identify undervalued or off-market properties.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-2">Automated Outreach</h2>
-              <p className="text-sm text-gray-600">
-                Sends custom cold emails, SMS, and even AI-generated voice calls to leads.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-2">AI Scheduler</h2>
-              <p className="text-sm text-gray-600">
-                Book meetings automatically with interested buyers or sellers via Google Calendar.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-2">Analytics Dashboard</h2>
-              <p className="text-sm text-gray-600">
-                See what properties got the most engagement, outreach results, and lead summaries.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Button className="text-lg px-6 py-3 flex items-center gap-2">
-          <RocketIcon className="w-5 h-5" />
-          Request Early Access
-        </Button>
+        <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded shadow text-left">
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded"
+            required
+          />
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Phone Number"
+            value={formData.phone}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+          <button
+            type="submit"
+            className="w-full bg-black text-white p-2 rounded hover:bg-gray-800 transition"
+          >
+            Submit
+          </button>
+        </form>
       </div>
     </main>
   );
