@@ -1,5 +1,4 @@
 "use client";
-// Force redeploy
 
 import { useState } from "react";
 
@@ -29,15 +28,16 @@ export default function HomePage() {
         body: JSON.stringify(formData),
       });
 
-      const data = await res.json();
+      await res.json(); // No unused variable
+
       if (res.ok) {
         setResponseMsg("✅ Your request was received!");
         setFormData({ name: "", email: "", phone: "" });
       } else {
         setResponseMsg("❌ Something went wrong.");
       }
-    } catch (error) {
-      setResponseMsg("❌ Server error. Try again later.");
+    } catch {
+      setResponseMsg("❌ Server error. Try again later."); // No unused `error`
     } finally {
       setLoading(false);
     }
