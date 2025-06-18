@@ -1,9 +1,21 @@
 import { google } from "googleapis";
 
-// Create an authenticated JWT client
+// Load environment variables
+const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
+const privateKeyRaw = process.env.GOOGLE_PRIVATE_KEY;
+const spreadsheetId = process.env.GOOGLE_SPREADSHEET_ID;
+
+if (!clientEmail || !privateKeyRaw || !spreadsheetId) {
+  throw new Error("Missing one or more required environment variables: GOOGLE_CLIENT_EMAIL, GOOGLE_PRIVATE_KEY, GOOGLE_SPREADSHEET_ID");
+}
+
+// Decode private key
+const privateKey = privateKeyRaw.replace(/\\n/g, "\n");
+
+// Create authenticated JWT client
 const auth = new google.auth.JWT({
-  email: process.env.GOOGLE_CLIENT_EMAIL!,
-  key: process.env.GOOGLE_PRIVATE_KEY!.replace(/\\n/g, '\n'),
+  email: clientEmail,
+  key: privateKey,
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 
@@ -13,7 +25,7 @@ const sheets = google.sheets({ version: "v4", auth });
 // Append a row of data to the spreadsheet
 export async function appendRow(data: (string | number)[]) {
   await sheets.spreadsheets.values.append({
-    spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID!,
+    spreadsheetId,
     range: "Sheet1!A1",
     valueInputOption: "USER_ENTERED",
     requestBody: {
